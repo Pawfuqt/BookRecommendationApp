@@ -87,8 +87,9 @@ public class Main {
             System.out.println("\n=== User Menu ===");
             System.out.println("1. Add Book Recommendation");
             System.out.println("2. View All Book Recommendations");
-            System.out.println("3. Logout");
-            System.out.println("4. Update Book Recommendation");
+            System.out.println("3. Update Book Recommendation");
+            System.out.println("4. Delete Book Recommendation"); // 🆕 NEW OPTION
+            System.out.println("5. Logout");
             System.out.print("Choose an option: ");
             int choice = sc.nextInt();
             sc.nextLine(); // clear newline buffer
@@ -102,8 +103,7 @@ public class Main {
                     String author = sc.nextLine();
                     System.out.print("Enter Genre: ");
                     String genre = sc.nextLine();
-                   
-                    
+
                     int bookId = db.addBookRecommendation(title, author, genre, username);
                     if (bookId != -1)
                         System.out.println("📚 Book added successfully! (ID: " + bookId + ")");
@@ -120,10 +120,6 @@ public class Main {
                     break;
 
                 case 3:
-                    System.out.println("🔒 Logging out...");
-                    return;
-
-                case 4:
                     System.out.println("\n=== Update Book Recommendation ===");
                     System.out.print("Enter Book ID to Update: ");
                     int updateId = sc.nextInt();
@@ -139,6 +135,19 @@ public class Main {
                     String updateSQL = "UPDATE tbl_books SET b_title = ?, b_author = ?, b_genre = ? WHERE b_id = ?";
                     db.updateRecord(updateSQL, newTitle, newAuthor, newGenre, updateId);
                     break;
+
+                case 4:
+                    System.out.println("\n=== Delete Book Recommendation ===");
+                    System.out.print("Enter Book ID to Delete: ");
+                    int deleteId = sc.nextInt();
+
+                    String deleteSQL = "DELETE FROM tbl_books WHERE b_id = ?";
+                    db.deleteRecord(deleteSQL, deleteId); // ✅ Using your deleteRecord() method
+                    break;
+
+                case 5:
+                    System.out.println("🔒 Logging out...");
+                    return;
 
                 default:
                     System.out.println("⚠️ Invalid choice! Try again.");

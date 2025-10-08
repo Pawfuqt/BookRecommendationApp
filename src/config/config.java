@@ -159,5 +159,32 @@ public int addBookRecommendation(String title, String author, String genre, Stri
     return addRecord(sql, title, author, genre, username);
 }
 
+//-----------------------------------------------
+// ✅ DELETE METHOD
+//-----------------------------------------------
+public void deleteRecord(String sql, Object... values) {
+    try (Connection conn = this.connectDB();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        // Loop through the values and set them in the prepared statement dynamically
+        for (int i = 0; i < values.length; i++) {
+            if (values[i] instanceof Integer) {
+                pstmt.setInt(i + 1, (Integer) values[i]); // If the value is Integer
+            } else {
+                pstmt.setString(i + 1, values[i].toString()); // Default to String for other types
+            }
+        }
+
+        int affectedRows = pstmt.executeUpdate();
+        if (affectedRows > 0)
+            System.out.println("🗑️ Record deleted successfully!");
+        else
+            System.out.println("⚠️ No record found to delete!");
+
+    } catch (SQLException e) {
+        System.out.println("❌ Error deleting record: " + e.getMessage());
+    }
+}
+
     
 }
